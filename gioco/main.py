@@ -1,7 +1,7 @@
-#idee aggiungere le vite e restart del gioco
-#modificare tutte le variabili 
-#modificare le immagini
-#modificare impostazioni del gioco
+# 1 idee aggiungere le vite e restart del gioco
+
+
+# 3 modificare impostazioni del gioco
 
 import pygame
 from pygame.locals import *
@@ -18,17 +18,14 @@ pygame.display.set_caption('SpaceX')
 
 
 
-# colors
-#gray = (100, 100, 100)
-#green = (76, 208, 56)
+
 red = (200, 0, 0)
 white = (255, 255, 255)
 #yellow = (255, 232, 0)
 
-# road and marker sizes
+
 game_width = 1280
-#marker_width = 10
-#marker_height = 50
+
 
 # lane coordinates
 left_lane = 340#linea dove corrono le macchine e non serve per il player
@@ -54,7 +51,7 @@ fps = 120
 
 # game settings
 gameover = False
-speed = 2 
+speed = 4
 score = 0
 
 class Asteroids(pygame.sprite.Sprite): #?
@@ -63,7 +60,7 @@ class Asteroids(pygame.sprite.Sprite): #?
         pygame.sprite.Sprite.__init__(self)
         
         # scale the image down so it's not wider than the lane
-        image_scale = 45 / image.get_rect().width #da modificare quando cambiamo immagine modifica anche oggetto player e ostacolo
+        image_scale = 100 / image.get_rect().width #da modificare quando cambiamo immagine modifica anche oggetto player e ostacolo
         new_width = image.get_rect().width * image_scale
         new_height = image.get_rect().height * image_scale
         self.image = pygame.transform.scale(image, (new_width, new_height)) #?
@@ -74,7 +71,7 @@ class Asteroids(pygame.sprite.Sprite): #?
 class SpaceShip(Asteroids):
     
     def __init__(self, x, y):
-        image = pygame.image.load('images/spaceship.png')#('images/car.png')
+        image = pygame.image.load('images/ship.png')#('images/car.png')
         super().__init__(image, x, y)
         
 
@@ -88,7 +85,7 @@ player = SpaceShip(player_x, player_y) #assegna player a player vehicle e gli as
 player_group.add(player) #?
 
 # load the vehicle images
-image_files = ['asteroid.png']#  ['pickup_truck.png', 'semi_trailer.png', 'taxi.png', 'van.png'] #spawn viene richiamato random?
+image_files = ['A1.png', 'A2.png', 'A3.png', 'A4.png', 'A5.png', 'A6.png', 'A7.png', 'A8.png', 'A9.png', 'A10.png', 'A11.png']
 asteroid_images = []
 for image_filename in image_files:
     image = pygame.image.load('images/' + image_filename)
@@ -229,7 +226,7 @@ while running:
         pygame.draw.rect(screen, red, (0, 50, width, 100))
         
         font = pygame.font.Font(pygame.font.get_default_font(), 16)
-        text = font.render('Game over. Play again? (Enter Y or N)', True, white)
+        text = font.render('Game over. Vuoi rigiocare? (Clicca S o N)', True, white)
         text_rect = text.get_rect()
         text_rect.center = (width / 2, 100)
         screen.blit(text, text_rect)
@@ -249,7 +246,7 @@ while running:
                 
             # get the user's input (y or n)
             if event.type == KEYDOWN: #running mai in false
-                if event.key == K_y:
+                if event.key == K_s:
                     # reset the game
                     gameover = False
                     speed = 2
