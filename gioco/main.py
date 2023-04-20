@@ -1,7 +1,12 @@
-# 1 idee aggiungere le vite e restart del gioco
-
-
+# 1 idee aggiungere le vite
 # 3 modificare impostazioni del gioco
+# aggiungere i credits
+
+
+#problemi se collisione frontale crasha e non fa schermata gameover
+#riniziare il loop delle vite
+
+
 
 import pygame
 from pygame.locals import *
@@ -18,13 +23,13 @@ pygame.display.set_caption('SpaceX')
 
 
 
-
+#colori
 red = (200, 0, 0)
 white = (255, 255, 255)
-#yellow = (255, 232, 0)
 
 
-game_width = 1280
+#larghezza del campo di gioco
+#game_width = 1000
 
 
 # lane coordinates
@@ -33,13 +38,6 @@ center_lane = 640
 right_lane = 940
 lanes = [left_lane, center_lane, right_lane]
 
-# road and edge markers
-#space_lane = (100, 0, game_width, height)
-#left_edge_marker = (95, 0, marker_width, height) #bordi della strada
-#right_edge_marker = (395, 0, marker_width, height)
-
-# for animating movement of the lane markers
-#lane_marker_move_y = 0 #fa muovere line trattegiate bianche in base alla velocità
 
 # player's starting coordinates
 player_x = 640
@@ -95,6 +93,7 @@ for image_filename in image_files:
 collision = pygame.image.load('images/crash.png')
 crash_rect = collision.get_rect() #? probabilmente incluso in un rettangolo
 
+vite = 3
 
 
 
@@ -111,35 +110,16 @@ while running:
             
         # move the player's car using the left/right arrow keys
         if event.type == KEYDOWN: #contenitore quando premi un tasto lo rileva
-            
             if event.key == K_LEFT and player.rect.center[0] > left_lane: #se modifico possono spostare 4 volte 
                 player.rect.x -= 300
             elif event.key == K_RIGHT and player.rect.center[0] < right_lane:
                 player.rect.x += 300
                 
             # check if there's a side swipe collision after changing lanes #solo per le collisioni laterali
-            for asteroid in asteroid_group:
-                if pygame.sprite.collide_rect(player, asteroid): #controlla le collisioni
-                    
-
-                    #aggiungere if per le le vite con sprite e counter 
-
-                    gameover = True
-                    
-                    # place the player's car next to other vehicle
-                    # and determine where to position the crash image
-                    if event.key == K_LEFT:
-                        player.rect.left = asteroid.rect.right
-                        crash_rect.center = [player.rect.left, (player.rect.center[1] + asteroid.rect.center[1]) / 2] #per decidere dove far spawnare l'immagine dell'esplosione
-                    elif event.key == K_RIGHT:
-                        player.rect.right = asteroid.rect.left
-                        crash_rect.center = [player.rect.right, (player.rect.center[1] + asteroid.rect.center[1]) / 2]
             
             
-    # draw the grass
-    #screen.fill(green) #da modificare il colore
     
-    screen.fill([255, 255, 255])
+    screen.fill(white)
     gameDisplay = pygame.display.set_mode((width,height))
 
     bg = pygame.image.load("images/bg5.jpg")
@@ -147,25 +127,7 @@ while running:
     #INSIDE OF THE GAME LOOP
     gameDisplay.blit(bg, (0, 0))
 
-    #REST OF ITEMS ARE BLIT'D TO SCREEN.
 
-
-
-    # draw the road
-    #pygame.draw.rect(screen, gray, road) #? da modificare il colore
-    
-    # draw the edge markers
-    #pygame.draw.rect(screen, yellow, left_edge_marker)
-    #pygame.draw.rect(screen, yellow, right_edge_marker)
-    
-    # draw the lane markers
-    #lane_marker_move_y += speed * 2
-    #if lane_marker_move_y >= marker_height * 2:
-     #   lane_marker_move_y = 0
-    #for y in range(marker_height * -2, height, marker_height * 2):
-     #   pygame.draw.rect(screen, white, (left_lane + 45, y + lane_marker_move_y, marker_width, marker_height))
-      #  pygame.draw.rect(screen, white, (center_lane + 45, y + lane_marker_move_y, marker_width, marker_height))
-        
     # draw the player's car
     player_group.draw(screen)
     
@@ -204,6 +166,36 @@ while running:
             if score > 0 and score % 5 == 0: #da modificare per vedere la difficoltà
                 speed += 1
     
+    for asteroid in asteroid_group:
+        if pygame.sprite.collide_rect(player, asteroid): #controlla le collisioni
+
+            vite -= 1
+                    #aggiungere if per le le vite con sprite e counter 
+            if vite == 0:
+                gameover = True
+                        
+                if event.key == K_LEFT:
+                    player.rect.left = asteroid.rect.right
+                    crash_rect.center = [player.rect.left, (player.rect.center[1] + asteroid.rect.center[1]) / 2] #per decidere dove far spawnare l'immagine dell'esplosione
+                elif event.key == K_RIGHT:
+                    player.rect.right = asteroid.rect.left
+                    crash_rect.center = [player.rect.right, (player.rect.center[1] + asteroid.rect.center[1]) / 2]
+            else:
+                continue
+                    # place the player's car next to other vehicle
+                    # and determine where to position the crash image
+        else:
+            pygame.sprite.spritecollide(player, asteroid_group, True) #metodo diverso
+            if vite == 0:
+                gameover = True
+                crash_rect.center = [player.rect.center[0], player.rect.top] #dove spawnare l'immagine
+            else:
+                continue
+    print(vite)
+
+
+
+
     # draw the vehicles
     asteroid_group.draw(screen)
     
@@ -248,6 +240,7 @@ while running:
             if event.type == KEYDOWN: #running mai in false
                 if event.key == K_s:
                     # reset the game
+                    vite = 3
                     gameover = False
                     speed = 2
                     score = 0
