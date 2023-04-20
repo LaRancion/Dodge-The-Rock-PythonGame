@@ -1,10 +1,5 @@
-# 1 idee aggiungere le vite
-# 3 modificare impostazioni del gioco
-# aggiungere i credits
-
-
-#problemi se collisione frontale crasha e non fa schermata gameover
-#riniziare il loop delle vite
+# modificare impostazioni del gioco
+# aggiungere i credits e commenti
 
 
 
@@ -28,9 +23,6 @@ red = (200, 0, 0)
 white = (255, 255, 255)
 
 
-#larghezza del campo di gioco
-#game_width = 1000
-
 
 # lane coordinates
 left_lane = 340#linea dove corrono le macchine e non serve per il player
@@ -49,7 +41,7 @@ fps = 120
 
 # game settings
 gameover = False
-speed = 4
+speed = 10
 score = 0
 
 class Asteroids(pygame.sprite.Sprite): #?
@@ -117,7 +109,23 @@ while running:
                 
             # check if there's a side swipe collision after changing lanes #solo per le collisioni laterali
             
-            
+    for asteroid in asteroid_group:
+        if pygame.sprite.spritecollide(player, asteroid_group, True): #controlla le collisioni
+            vite -= 1
+                    #aggiungere if per le le vite con sprite e counter 
+            if vite == 0:
+                gameover = True
+                if event.type == KEYDOWN:      #fix errore del keydown error   
+                    if event.key == K_LEFT:
+                        player.rect.left = asteroid.rect.right
+                        crash_rect.center = [player.rect.left, (player.rect.center[1] + asteroid.rect.center[1]) / 2] #per decidere dove far spawnare l'immagine dell'esplosione
+                    elif event.key == K_RIGHT:
+                        player.rect.right = asteroid.rect.left
+                        crash_rect.center = [player.rect.right, (player.rect.center[1] + asteroid.rect.center[1]) / 2]
+                else:
+                    crash_rect.center = [player.rect.center[0], player.rect.top]
+
+    print(vite)        
     
     screen.fill(white)
     gameDisplay = pygame.display.set_mode((width,height))
@@ -166,30 +174,6 @@ while running:
             if score > 0 and score % 5 == 0: #da modificare per vedere la difficoltà
                 speed += 1
     
-    for asteroid in asteroid_group:
-        if pygame.sprite.collide_rect(player, asteroid): #controlla le collisioni
-
-            vite -= 1
-                    #aggiungere if per le le vite con sprite e counter 
-            if vite == 0:
-                gameover = True
-                if event.type == KEYDOWN:      #fix errore del keydown error   
-                    if event.key == K_LEFT:
-                        player.rect.left = asteroid.rect.right
-                        crash_rect.center = [player.rect.left, (player.rect.center[1] + asteroid.rect.center[1]) / 10000] #per decidere dove far spawnare l'immagine dell'esplosione
-                    elif event.key == K_RIGHT:
-                        player.rect.right = asteroid.rect.left
-                        crash_rect.center = [player.rect.right, (player.rect.center[1] + asteroid.rect.center[1]) / 10000]
-                    # place the player's car next to other vehicle
-                    # and determine where to position the crash image
-        else:
-            pygame.sprite.spritecollide(player, asteroid_group, True) #metodo diverso
-            crash_rect.center = [player.rect.center[0], player.rect.top] #dove spawnare l'immagine
-    print(vite)
-
-
-
-
     # draw the vehicles
     asteroid_group.draw(screen)
     
@@ -200,17 +184,14 @@ while running:
     text_rect.center = (50, 100) #per posizione score
     screen.blit(text, text_rect)  
     
+    #display vite
     font = pygame.font.Font(pygame.font.get_default_font(), 16)
     text = font.render('vite: '  + str(vite), True, white)
     text_rect = text.get_rect()
     text_rect.center = (50, 125) #per posizione score
     screen.blit(text, text_rect)  #?
     
-    # check if there's a head on collision #collisioni frontali
-    #if pygame.sprite.spritecollide(player, asteroid_group, True): #metodo diverso
-    #    gameover = True
-     #   crash_rect.center = [player.rect.center[0], player.rect.top] #dove spawnare l'immagine
-            
+
     # display game over
     if gameover:
         screen.blit(collision, crash_rect) #?
@@ -242,7 +223,7 @@ while running:
                     # reset the game
                     vite = 3
                     gameover = False
-                    speed = 2
+                    speed = 10
                     score = 0
                     asteroid_group.empty()
                     player.rect.center = [player_x, player_y]
