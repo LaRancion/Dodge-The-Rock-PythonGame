@@ -176,10 +176,10 @@ while running:
                 if event.type == KEYDOWN:      #fix errore del keydown error   
                     if event.key == K_LEFT:
                         player.rect.left = asteroid.rect.right
-                        crash_rect.center = [player.rect.left, (player.rect.center[1] + asteroid.rect.center[1]) / 2] #per decidere dove far spawnare l'immagine dell'esplosione
+                        crash_rect.center = [player.rect.left, (player.rect.center[1] + asteroid.rect.center[1]) / 10000] #per decidere dove far spawnare l'immagine dell'esplosione
                     elif event.key == K_RIGHT:
                         player.rect.right = asteroid.rect.left
-                        crash_rect.center = [player.rect.right, (player.rect.center[1] + asteroid.rect.center[1]) / 2]
+                        crash_rect.center = [player.rect.right, (player.rect.center[1] + asteroid.rect.center[1]) / 10000]
                     # place the player's car next to other vehicle
                     # and determine where to position the crash image
         else:
@@ -198,7 +198,13 @@ while running:
     text = font.render('Score: ' + str(score), True, white)
     text_rect = text.get_rect()
     text_rect.center = (50, 100) #per posizione score
-    screen.blit(text, text_rect)   #?
+    screen.blit(text, text_rect)  
+    
+    font = pygame.font.Font(pygame.font.get_default_font(), 16)
+    text = font.render('vite: '  + str(vite), True, white)
+    text_rect = text.get_rect()
+    text_rect.center = (50, 125) #per posizione score
+    screen.blit(text, text_rect)  #?
     
     # check if there's a head on collision #collisioni frontali
     #if pygame.sprite.spritecollide(player, asteroid_group, True): #metodo diverso
