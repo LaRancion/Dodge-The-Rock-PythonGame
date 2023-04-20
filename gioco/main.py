@@ -173,24 +173,18 @@ while running:
                     #aggiungere if per le le vite con sprite e counter 
             if vite == 0:
                 gameover = True
-                        
-                if event.key == K_LEFT:
-                    player.rect.left = asteroid.rect.right
-                    crash_rect.center = [player.rect.left, (player.rect.center[1] + asteroid.rect.center[1]) / 2] #per decidere dove far spawnare l'immagine dell'esplosione
-                elif event.key == K_RIGHT:
-                    player.rect.right = asteroid.rect.left
-                    crash_rect.center = [player.rect.right, (player.rect.center[1] + asteroid.rect.center[1]) / 2]
-            else:
-                continue
+                if event.type == KEYDOWN:      #fix errore del keydown error   
+                    if event.key == K_LEFT:
+                        player.rect.left = asteroid.rect.right
+                        crash_rect.center = [player.rect.left, (player.rect.center[1] + asteroid.rect.center[1]) / 2] #per decidere dove far spawnare l'immagine dell'esplosione
+                    elif event.key == K_RIGHT:
+                        player.rect.right = asteroid.rect.left
+                        crash_rect.center = [player.rect.right, (player.rect.center[1] + asteroid.rect.center[1]) / 2]
                     # place the player's car next to other vehicle
                     # and determine where to position the crash image
         else:
             pygame.sprite.spritecollide(player, asteroid_group, True) #metodo diverso
-            if vite == 0:
-                gameover = True
-                crash_rect.center = [player.rect.center[0], player.rect.top] #dove spawnare l'immagine
-            else:
-                continue
+            crash_rect.center = [player.rect.center[0], player.rect.top] #dove spawnare l'immagine
     print(vite)
 
 
@@ -207,9 +201,9 @@ while running:
     screen.blit(text, text_rect)   #?
     
     # check if there's a head on collision #collisioni frontali
-    if pygame.sprite.spritecollide(player, asteroid_group, True): #metodo diverso
-        gameover = True
-        crash_rect.center = [player.rect.center[0], player.rect.top] #dove spawnare l'immagine
+    #if pygame.sprite.spritecollide(player, asteroid_group, True): #metodo diverso
+    #    gameover = True
+     #   crash_rect.center = [player.rect.center[0], player.rect.top] #dove spawnare l'immagine
             
     # display game over
     if gameover:
