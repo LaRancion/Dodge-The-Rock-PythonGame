@@ -1,7 +1,5 @@
-# modificare impostazioni del gioco
-# aggiungere i credits e commenti
-
-
+# aggiungere i credits su git e commenti programma
+#problema animazione esplosione è sempre frontale se muovo con A o D
 
 import pygame
 from pygame.locals import *
@@ -15,7 +13,6 @@ height = 720
 screen_size = (width, height)
 screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption('SpaceX')
-
 
 
 #colori
@@ -88,9 +85,6 @@ crash_rect = collision.get_rect() #? probabilmente incluso in un rettangolo
 
 vite = 3
 
-
-
-
 # game loop
 running = True
 while running:
@@ -103,9 +97,13 @@ while running:
             
         # move the player's car using the left/right arrow keys
         if event.type == KEYDOWN: #contenitore quando premi un tasto lo rileva
-            if event.key == K_LEFT and player.rect.center[0] > left_lane: #se modifico possono spostare 4 volte 
+            if event.key == K_LEFT  and player.rect.center[0] > left_lane: #se modifico possono spostare 4 volte 
+                player.rect.x -= 300
+            elif event.key == K_a  and player.rect.center[0] > left_lane: #se modifico possono spostare 4 volte 
                 player.rect.x -= 300
             elif event.key == K_RIGHT and player.rect.center[0] < right_lane:
+                player.rect.x += 300
+            elif event.key == K_d and player.rect.center[0] < right_lane:
                 player.rect.x += 300
                 
             # check if there's a side swipe collision after changing lanes #solo per le collisioni laterali
@@ -119,8 +117,14 @@ while running:
                 if event.type == KEYDOWN:      #fix errore del keydown error   
                     if event.key == K_LEFT:
                         player.rect.left = asteroid.rect.right
+                        crash_rect.center = [player.rect.left, (player.rect.center[1] + asteroid.rect.center[1]) / 2]
+                    elif event.key == K_a:
+                        player.rect.left = asteroid.rect.right
                         crash_rect.center = [player.rect.left, (player.rect.center[1] + asteroid.rect.center[1]) / 2] #per decidere dove far spawnare l'immagine dell'esplosione
                     elif event.key == K_RIGHT:
+                        player.rect.right = asteroid.rect.left
+                        crash_rect.center = [player.rect.right, (player.rect.center[1] + asteroid.rect.center[1]) / 2]
+                    elif event.key == K_d:
                         player.rect.right = asteroid.rect.left
                         crash_rect.center = [player.rect.right, (player.rect.center[1] + asteroid.rect.center[1]) / 2]
                 else:
@@ -146,15 +150,6 @@ while running:
 
 # draw the heart on the screen
     screen.blit(heart_image, heart_rect)
-
-
-#bisogna aggiungere anche la parte di sprite
-   # heart = pygame.image.load("images/heart.png")
-    #heart.draw(screen)
-    #gameDisplay.blit(heart(0,0))
-    #pygame.display.flip()
-
-
 
 
     # draw the player's car
@@ -212,17 +207,34 @@ while running:
     text_rect.center = (90, 250) #per posizione score
     screen.blit(text, text_rect)  #?
     
+    #diplay tasti da muovere
+    font = pygame.font.Font(pygame.font.get_default_font(), 20)
+    text = font.render('Moves:'  , True, white)
+    text_rect = text.get_rect()
+    text_rect.center = (115, 500) #per posizione score
+    screen.blit(text, text_rect)
 
+    font = pygame.font.Font(pygame.font.get_default_font(), 20)
+    text = font.render('left (left_arrow or A )'  , True, white)
+    text_rect = text.get_rect()
+    text_rect.center = (115, 525) #per posizione score
+    screen.blit(text, text_rect)
+
+    font = pygame.font.Font(pygame.font.get_default_font(), 20)
+    text = font.render('right (right_arrow or D)'  , True, white)
+    text_rect = text.get_rect()
+    text_rect.center = (115, 550) #per posizione score
+    screen.blit(text, text_rect)
     # display game over
     if gameover:
         screen.blit(collision, crash_rect) #?
         
-        pygame.draw.rect(screen, red, (0, 50, width, 100))
+        pygame.draw.rect(screen, red, (0, 0, width, 175))
         
         font = pygame.font.Font(pygame.font.get_default_font(), 16)
-        text = font.render('Game over. Vuoi rigiocare? (Clicca S o N)', True, white)
+        text = font.render('Game over! Clicca S per rigiocare o N per chiudere il gioco', True, white)
         text_rect = text.get_rect()
-        text_rect.center = (width / 2, 100)
+        text_rect.center = (width / 2, 90)
         screen.blit(text, text_rect)
             
     pygame.display.update()
