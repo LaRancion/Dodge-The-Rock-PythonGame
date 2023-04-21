@@ -70,6 +70,7 @@ class SpaceShip(Asteroids):
 player_group = pygame.sprite.Group() #?
 asteroid_group = pygame.sprite.Group()
 
+
 # create the player's car
 player = SpaceShip(player_x, player_y) #assegna player a player vehicle e gli assegna l'immagine
 player_group.add(player) #?
@@ -131,9 +132,29 @@ while running:
     gameDisplay = pygame.display.set_mode((width,height))
 
     bg = pygame.image.load("images/bg5.jpg")
-
-    #INSIDE OF THE GAME LOOP
+    #INSIDE OF THE GAME LOOP 
     gameDisplay.blit(bg, (0, 0))
+
+    # load the heart image
+    heart_image = pygame.image.load('images/heart.png')
+    heart_rect = heart_image.get_rect()
+
+# set the heart's position on the screen
+    heart_x = 50
+    heart_y = 50
+    heart_rect.center = (heart_x, heart_y)
+
+# draw the heart on the screen
+    screen.blit(heart_image, heart_rect)
+
+
+#bisogna aggiungere anche la parte di sprite
+   # heart = pygame.image.load("images/heart.png")
+    #heart.draw(screen)
+    #gameDisplay.blit(heart(0,0))
+    #pygame.display.flip()
+
+
 
 
     # draw the player's car
@@ -185,10 +206,10 @@ while running:
     screen.blit(text, text_rect)  
     
     #display vite
-    font = pygame.font.Font(pygame.font.get_default_font(), 16)
-    text = font.render('vite: '  + str(vite), True, white)
+    font = pygame.font.Font(pygame.font.get_default_font(), 25)
+    text = font.render(' '  + str(vite), True, white)
     text_rect = text.get_rect()
-    text_rect.center = (50, 125) #per posizione score
+    text_rect.center = (90, 50) #per posizione score
     screen.blit(text, text_rect)  #?
     
 
