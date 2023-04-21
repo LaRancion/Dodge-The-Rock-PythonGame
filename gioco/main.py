@@ -126,7 +126,7 @@ while running:
                 else:
                     crash_rect.center = [player.rect.center[0], player.rect.top]
 
-    print(vite)        
+    #print(vite)        
     
     screen.fill(white)
     gameDisplay = pygame.display.set_mode((width,height))
@@ -141,7 +141,7 @@ while running:
 
 # set the heart's position on the screen
     heart_x = 50
-    heart_y = 50
+    heart_y = 250
     heart_rect.center = (heart_x, heart_y)
 
 # draw the heart on the screen
@@ -199,17 +199,17 @@ while running:
     asteroid_group.draw(screen)
     
     # display the score                            #lo score è dentro un rettangono
-    font = pygame.font.Font(pygame.font.get_default_font(), 16)
+    font = pygame.font.Font(pygame.font.get_default_font(), 20)
     text = font.render('Score: ' + str(score), True, white)
     text_rect = text.get_rect()
-    text_rect.center = (50, 100) #per posizione score
+    text_rect.center = (60, 200) #per posizione score
     screen.blit(text, text_rect)  
     
     #display vite
     font = pygame.font.Font(pygame.font.get_default_font(), 25)
     text = font.render(' '  + str(vite), True, white)
     text_rect = text.get_rect()
-    text_rect.center = (90, 50) #per posizione score
+    text_rect.center = (90, 250) #per posizione score
     screen.blit(text, text_rect)  #?
     
 
