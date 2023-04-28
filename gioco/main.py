@@ -3,9 +3,11 @@
 import pygame
 from pygame.locals import *
 import random
+from pygame import mixer
 
 #pygame inizializzazione
 pygame.init()
+mixer.init()
 
 # dimensioni finestra di gioco
 width = 1280
@@ -20,7 +22,8 @@ pygame.display.set_caption('Dodge The Rock') #nome del gioco
 red = (200, 0, 0)
 white = (255, 255, 255)
 
-
+mixer.music.load('images/OrbitalColossus.mp3')
+mixer.music.play()
 
 # posizioni delle linee immaginarie su cui corrono gli asteroidi e il su cui si sposta il giocatore 
 left_lane = 340
@@ -93,6 +96,7 @@ while running:
     
     clock.tick(fps)
     
+
     for event in pygame.event.get():
         if event.type == QUIT:
             running = False #per interrompere il ciclo
@@ -235,7 +239,6 @@ while running:
     while gameover:
         
         clock.tick(fps)
-        
         for event in pygame.event.get():
             
             if event.type == QUIT: #se premi la x in alto fermi 
